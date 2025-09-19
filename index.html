@@ -42,15 +42,31 @@
       font-weight: bold;
     }
 
-    #searchResults {
-      margin-top: 20px;
-      text-align: start;
-      background: rgba(255, 255, 255, 0.1);
-      padding: 15px;
-      border-radius: 10px;
-      min-height: 100px;
+    /* Fullscreen Search Results */
+    #searchResultsOverlay {
+      display: none; /* hidden by default */
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.95);
+      color: black;
+      z-index: 9999;
+      overflow-y: auto;
+      padding: 20px;
     }
 
+    #closeResults {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -58,12 +74,15 @@
   <canvas id="particles"></canvas>
 
   <div class="search-container">
-    <h1>🔍 نظام البحث الذكي</h1>
+    <h1> نظام البحث الذكي 🔍</h1>
     <input class="form-control form-control-lg" placeholder="ابحث هنا..." id="searchWidgetTrigger">
+  </div>
+
+  <!-- Fullscreen Results Overlay -->
+  <div id="searchResultsOverlay">
+    <button id="closeResults">❌ إغلاق</button>
     <div id="searchResults"></div>
-
-   
-
+  </div>
 
   <!-- Gen App Builder Widget -->
   <script src="https://cloud.google.com/ai/gen-app-builder/client?hl=ar"></script>
@@ -72,6 +91,24 @@
     triggerId="searchWidgetTrigger"
     resultId="searchResults">
   </gen-search-widget>
+
+  <!-- Show/Hide Overlay -->
+  <script>
+    const searchInput = document.getElementById("searchWidgetTrigger");
+    const resultsOverlay = document.getElementById("searchResultsOverlay");
+    const closeBtn = document.getElementById("closeResults");
+
+    searchInput.addEventListener("input", () => {
+      if (searchInput.value.trim() !== "") {
+        resultsOverlay.style.display = "block";
+      }
+    });
+
+    closeBtn.addEventListener("click", () => {
+      resultsOverlay.style.display = "none";
+      searchInput.value = "";
+    });
+  </script>
 
   <!-- Particles JS -->
   <script>
